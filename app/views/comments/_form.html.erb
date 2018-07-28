@@ -1,0 +1,11 @@
+<%= form_for [post, post.comments.new] do |form| %>
+  <%= form_tag(post.comments.new[:body]) do %>
+    <div>
+      <p><%= form.text_area :body, cols: "80", rows: "2" %></p>
+    </div>
+
+    <div class="actions">
+      <%= form.submit "Comment" %>
+    </div>
+  <% end %>
+<% end %>
