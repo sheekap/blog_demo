@@ -1,0 +1,31 @@
+<%= form_with(model: post, local: true) do |form| %>
+  <% if post.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h2>
+
+      <ul>
+      <% post.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <% if user_signed_in? %>
+    <div>
+      <p>Title: <%= form.text_field :title %></p>
+    </div>
+
+    <div>
+      <p><%= form.text_area :body, cols: "50", rows: "10" %></p>
+    </div>
+
+    <div class="actions">
+      <%= form.submit %>
+    </div>
+  <% else %>
+    <div>
+      <p><%= link_to "Log in to create a new post", new_user_session_path %></p>
+    </div>
+  <% end %>
+<% end %>
