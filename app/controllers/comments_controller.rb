@@ -8,28 +8,31 @@ class CommentsController < ApplicationController
     @comments = Comment.all
   end
 
-  # GET /comments/1
-  # GET /comments/1.json
   def show
   end
 
-  # GET /comments/new
   def new
     @comment = Comment.new
   end
 
-  # GET /comments/1/edit
   def edit
   end
 
-  # POST /comments
-  # POST /comments.json
   def create
     @post = Post.find(params[:post_id])
     @comment = current_user.comments.create(comment_params_with_post)
+    topic = "post.comment_created"
+
+    value = {
+      post_id: @post.id,
+      user_id: @comment.user.id,
+      body: @comment.body,
+      post_comment_count: @post.comments.count
+    }
 
     respond_to do |format|
       if @comment.save
+        DeliveryBoy.deliver_async(value.to_json, topic: topic)
         format.html { redirect_to @post, notice: 'Comment was successfully created.' }
         format.json { render :show, status: :created, location: @comment }
       else
