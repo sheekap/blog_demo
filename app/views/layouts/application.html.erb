@@ -1,18 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Blog</title>
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <title><%= content_for?(:title) ? yield(:title) : "Untitled" %></title>
+
+    <%= stylesheet_link_tag    "application" %>
+    <%= javascript_include_tag "application", 'data-turbolinks-track' => true %>
+    <%= csrf_meta_tags %>
   </head>
 
   <body>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
+    <div class="navbar">
+      <div class="link">
+        <% if user_signed_in? %>
+            <ul class="menu align-right">
+              <li><%= link_to "Profile", profile_path(current_user) %></li>
+              <li><%= link_to("Logout", destroy_user_session_path, method: :delete) %>
+            </ul>
+        <% else %>
+          <ul class="menu align-right">
+            <%= link_to "Log In", new_user_session_path %>
+          </ul>
+        <%  end %>
+      </div>
+    </div>
 
     <%= yield %>
+
   </body>
 </html>
