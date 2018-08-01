@@ -1,24 +1,15 @@
-<p id="notice"><%= notice %></p>
+<%= title "Entry Hall" %>
 
-<h1>Posts</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @posts.each do |post| %>
-      <tr>
-        <td><%= link_to 'Show', post %></td>
-        <td><%= link_to 'Edit', edit_post_path(post) %></td>
-        <td><%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div id="posts-index-container", class="grid-x">
+  <% @posts.each do |post| %>
+    <div class="post-link-container cell small-4 medium-4 large-4">
+      <%= link_to post_path(post) do %>
+        <h3><%= post.title %></h3>
+        <h6><%= post.user.email %></h6>
+      <% end %>
+    </div>
+  <% end %>
+</div>
 
 <br>
 

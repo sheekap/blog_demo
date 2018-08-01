@@ -1,20 +1,21 @@
-<h3><%= @post.title %></h3>
+<%- title @post.title %>
 
-<div>
-  <p><%= @post.user.email %></p>
+<div id="post-container">
+  <div class="post-title-container">
+    <h3><%= @post.title %></h3>
+    <p><%= @post.user.email %></p>
+  </div>
+
+  <div class="post-body-container">
+    <p><%= @post.body %></p>
+  </div>
 </div>
 
-<div>
-  <p><%= @post.body %></p>
-</div>
+<div id="comment-container">
+    <% @comments.each do |comment| %>
+      <p class="show-comment-container"><%= comment.body %></p>
+    <% end %>
 
-<div>
-  <% @comments.each do |comment| %>
-    <p><%= comment.body %></p>
-  <% end %>
-</div>
-
-<div>
   <%= render partial: 'comments/form', locals: { post: @post } %>
 </div>
 

@@ -14,7 +14,79 @@
 
 @import "foundation_and_overrides";
 
+@include foundation-xy-grid-classes(
+  $base-grid: true,
+  $margin-grid: true,
+  $padding-grid: true,
+  $block-grid: true,
+  $collapse: true,
+  $offset: true,
+  $vertical-grid: true,
+  $frame-grid: true
+);
+
 body{
+  width: 70%;
+  margin: 0 auto;
+}
+
+#post-container, .show-comment-container{
+  border-color: LightGray;
+}
+
+
+#post-container{
+  border-style: solid;
+  border-width: 10px;
+  border-radius: 3em;
+}
+
+.post-title-container, .post-body-container, .comment-body-container, .posts-index-container{
   width: 90%;
   margin: 0 auto;
+}
+
+.post-title-container h3{
+  font-family: "Lucida Console", Monaco, monospace;
+  font-weight: bold;
+  color: Gray;
+}
+
+.post-title-container p, .post-body-container, .show-comment-container p, .comment-body-container{
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+.post-title-container p{
+  font-weight: bold;
+  font-style: italic;
+  color: Gray;
+}
+
+.comment-body-container{ margin-top: 1.5em }
+
+.show-comment-container{
+  border-style: dashed;
+  border-width: 5px;
+
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 1.5em;
+  margin-bottom:1.5em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}
+
+p {
+  padding-left: 1em;
+}
+
+.post-link-container{
+  background-color: DarkGray;
+  text-align: center;
+  display: inline-block;
+  margin: 2em;
+}
+
+.post-link-container a{
+  color: White;
 }

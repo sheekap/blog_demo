@@ -1,8 +1,8 @@
 class CommentsController < ApplicationController
   before_action :set_comment, only: [:show, :edit, :update, :destroy]
+  skip_before_action :authenticate_user!, only: [:show]
+  skip_before_filter :verify_authenticity_token, only: [:create]
 
-  # GET /comments
-  # GET /comments.json
   def index
     @comments = Comment.all
   end
@@ -29,9 +29,10 @@ class CommentsController < ApplicationController
       post_comment_count: @post.comments.count
     }
 
+    DeliveryBoy.deliver_async(value.to_json, topic: topic)
+
     respond_to do |format|
       if @comment.save
-        DeliveryBoy.deliver_async(value.to_json, topic: topic)
         format.html { redirect_to @post, notice: 'Comment was successfully created.' }
         format.json { render :show, status: :created, location: @comment }
       else
@@ -41,9 +42,20 @@ class CommentsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /comments/1
-  # PATCH/PUT /comments/1.json
   def update
+    post = Post.find(@comment.post_id)
+    topic = "comment.updated"
+
+    value = {
+      post_id: post.id,
+      post_title: post.title,
+      user_id: user.id,
+      body: comment.body,
+      likes: comment.likes
+    }
+
+    DeliveryBoy.deliver_async(value.to_json, topic: topic)
+
     respond_to do |format|
       if @comment.update(comment_params)
         format.html { redirect_to @comment, notice: 'Comment was successfully updated.' }
@@ -55,8 +67,6 @@ class CommentsController < ApplicationController
     end
   end
 
-  # DELETE /comments/1
-  # DELETE /comments/1.json
   def destroy
     @comment.destroy
     respond_to do |format|
