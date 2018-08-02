@@ -1,7 +1,7 @@
 class CommentsController < ApplicationController
   before_action :set_comment, only: [:show, :edit, :update, :destroy]
   skip_before_action :authenticate_user!, only: [:show]
-  skip_before_filter :verify_authenticity_token, only: [:create]
+  skip_before_action :verify_authenticity_token, only: [:create]
 
   def index
     @comments = Comment.all
@@ -18,18 +18,24 @@ class CommentsController < ApplicationController
   end
 
   def create
+    require 'google/protobuf'
+    require 'google/protobuf/well_known_types'
+    require './protobuf_schemas/protobuf_schemas/comment_created_pb'
+
     @post = Post.find(params[:post_id])
     @comment = current_user.comments.create(comment_params_with_post)
     topic = "post.comment_created"
 
-    value = {
-      post_id: @post.id,
-      user_id: @comment.user.id,
-      body: @comment.body,
-      post_comment_count: @post.comments.count
-    }
+    msg = ProtobufSchemas::CommentCreated.new(
+      post_id: Google::Protobuf::Int64Value.new(value: @post.id),
+      user_id: Google::Protobuf::Int64Value.new(value: @comment.user.id),
+      body: Google::Protobuf::StringValue.new(value: @comment.body),
+      post_comment_count: Google::Protobuf::Int64Value.new(value: @post.comments.count)
+    )
 
-    DeliveryBoy.deliver_async(value.to_json, topic: topic)
+    encoded_msg = ProtobufSchemas::CommentCreated.encode(msg)
+
+    DeliveryBoy.deliver_async(encoded_msg, topic: topic, key: @post.id)
 
     respond_to do |format|
       if @comment.save

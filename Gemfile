@@ -15,6 +15,7 @@ gem 'devise'
 gem 'delivery_boy'
 gem 'foundation-rails'
 gem 'autoprefixer-rails'
+gem 'google-protobuf'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

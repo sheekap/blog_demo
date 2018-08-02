@@ -1,0 +1,11 @@
+syntax="proto3";
+package protobuf_schemas;
+
+import "google/protobuf/wrappers.proto";
+
+message CommentCreated {
+  google.protobuf.Int64Value post_id = 1;
+  google.protobuf.Int64Value user_id = 2;
+  google.protobuf.StringValue body = 3;
+  google.protobuf.Int64Value post_comment_count = 4;
+}
